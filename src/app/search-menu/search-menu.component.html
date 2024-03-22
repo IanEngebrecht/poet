@@ -1,0 +1,24 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<!-- Title -->
+<mat-form-field appearance="outline">
+    <span matPrefix>
+        <mat-icon class="search-icon">title</mat-icon>
+    </span>
+    <mat-label>Search by title</mat-label>
+    <input matInput type="text" [(ngModel)]="title"/>
+</mat-form-field>
+
+<!-- Author -->
+<mat-form-field appearance="outline">
+    <span matPrefix>
+        <mat-icon class="search-icon">person</mat-icon>
+    </span>
+    <mat-label>Search by author</mat-label>
+    <input matInput type="text" placeholder="Search by author" [(ngModel)]="author"/>
+</mat-form-field>
+
+<!-- Submit -->
+<button mat-fab color="primary" (click)="applySearch()">
+    <mat-icon>search</mat-icon>
+</button>

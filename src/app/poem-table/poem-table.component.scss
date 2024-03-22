@@ -1,0 +1,11 @@
+:host {
+  padding: 10px;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+}
+
+.user-info {
+  text-align: center;
+  font-style: italic;
+}

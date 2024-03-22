@@ -1,0 +1,11 @@
+version: "2"
+
+services:
+  webapp:
+    build: .
+    environment:
+      - NODE_ENV=development
+    network_mode: "host"
+    volumes:
+      - ./src:/app/src/
+      

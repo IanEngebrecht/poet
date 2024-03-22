@@ -1,0 +1,5 @@
+<app-search-menu (search)="search($event)"></app-search-menu>
+<app-poem-table *ngIf="!pending"></app-poem-table>
+<div *ngIf="pending" class="full-screen">
+  <mat-spinner></mat-spinner>
+</div>
