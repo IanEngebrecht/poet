@@ -27,7 +27,7 @@ import { SearchCriteria } from './search-menu';
 })
 export class SearchMenuComponent {
   // Triggered when the user clicks the search button
-  @Output() search = new Subject<SearchCriteria>();
+  @Output() search$ = new Subject<SearchCriteria>();
 
   // Contains the user's search criteria
   title: string = '';
@@ -37,7 +37,7 @@ export class SearchMenuComponent {
    * Perform the search using the current search string.
    */
   applySearch() {
-    this.search.next({ title: this.title, author: this.author });
+    this.search$.next({ title: this.title, author: this.author });
   }
 }
 

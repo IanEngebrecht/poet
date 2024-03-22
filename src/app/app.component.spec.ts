@@ -4,6 +4,7 @@ import { PoetryService } from './services/poetry.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Poem } from './services/poetry';
 import Swal from 'sweetalert2';
+import { SearchCriteria } from './search-menu/search-menu';
 
 describe('AppComponent', () => {
   let mockPoetryService: any;
@@ -19,7 +20,7 @@ describe('AppComponent', () => {
         'I am not a poet',
         'That much is clear',
         'I know that you know it',
-        'Lets have a beer',
+        'So lets have a beer',
       ]
     },
     {
@@ -46,7 +47,9 @@ describe('AppComponent', () => {
     // Override PoetryService with a mock version
     mockPoetryService = {
       BASE_URL: 'mymockurl/',
-      getAll: jasmine.createSpy('getAll').and.returnValue(Promise.resolve(mockData))
+      getAllFromAuthorAndTitle: jasmine.createSpy('getAllFromAuthorAndTitle').and.returnValue(Promise.resolve(mockData)),
+      getAllFromTitle: jasmine.createSpy('getAllFromTitle').and.returnValue(Promise.resolve(mockData)),
+      getAllFromAuthor: jasmine.createSpy('getAllFromAuthor').and.returnValue(Promise.resolve(mockData)),
     }
     TestBed.overrideProvider(PoetryService, { useValue: mockPoetryService })
 
@@ -55,27 +58,56 @@ describe('AppComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should update the poem table with the data from poetry service', async () => {
-    spyOn(app.table, 'update');
-    await app.search({ title: 'mocktitle', author: 'mockauthor' });
-    expect(app.table.update).toHaveBeenCalledOnceWith(mockData)
+  describe('Poem Search', () => {
+    const searchAT: SearchCriteria = { title: 'mocktitle', author: 'mockauthor' };
+    const searchA: SearchCriteria = { title: '', author: 'mockauthor' };
+    const searchT: SearchCriteria = { title: 'mocktitle', author: '' };
+
+    it('should update the poem table with the data from poetry service', async () => {
+      spyOn(app.table, 'update');
+      await app.search(searchAT);
+      expect(app.table.update).toHaveBeenCalledOnceWith(mockData)
+    });
+  
+    it('should pop up an error if the poetry call was unsuccessful', async () => {
+      mockPoetryService.getAllFromAuthorAndTitle = jasmine.createSpy('getAll').and.returnValue(Promise.reject('mock error'));
+      spyOn(Swal, 'fire');
+      await app.search(searchAT);
+      expect(Swal.fire).toHaveBeenCalledOnceWith({
+        title: 'Error!',
+        text: 'mock error',
+        icon: 'error',
+      } as any);
+    });
+  
+    it('should NOT update the poem table if the poetry call was unsuccessful', async () => {
+      mockPoetryService.getAllFromAuthorAndTitle = jasmine.createSpy('getAll').and.returnValue(Promise.reject('mock error'));
+      spyOn(app.table, 'update');
+      await app.search(searchAT);
+      expect(app.table.update).not.toHaveBeenCalled();
+    });
+
+    it('should allow a poem search with only title', async () => {
+      await app.search(searchT);
+      expect(mockPoetryService.getAllFromTitle).toHaveBeenCalledOnceWith(searchT.title);
+    });
+
+    it('should allow a poem search with only author', async () => {
+      await app.search(searchA);
+      expect(mockPoetryService.getAllFromAuthor).toHaveBeenCalledOnceWith(searchA.author);
+    });
+
+    it('should allow a poem search with both title and author', async () => {
+      await app.search(searchAT);
+      expect(mockPoetryService.getAllFromAuthorAndTitle).toHaveBeenCalledOnceWith(searchAT.author, searchAT.title);
+    });
   });
 
-  it('should pop up an error if the poetry call was unsuccessful', async () => {
-    mockPoetryService.getAll = jasmine.createSpy('getAll').and.returnValue(Promise.reject('mock error'));
-    spyOn(Swal, 'fire');
-    await app.search({ title: 'mocktitle', author: 'mockauthor' });
-    expect(Swal.fire).toHaveBeenCalledOnceWith({
-      title: 'Error!',
-      text: 'mock error',
-      icon: 'error',
-    } as any);
-  });
-
-  it('should not update the poem table if the poetry call was unsuccessful', async () => {
-    mockPoetryService.getAll = jasmine.createSpy('getAll').and.returnValue(Promise.reject('mock error'));
-    spyOn(app.table, 'update');
-    await app.search({ title: 'mocktitle', author: 'mockauthor' });
-    expect(app.table.update).not.toHaveBeenCalled();
+  describe('Poem View', () => {
+    it('should give selected poem from PoemTableComponent to PoemViewComponent', () => {
+      const mockPoem: Poem = { title: 'mocktitle', author: 'mockauthor', linecount: 0, lines: [] };
+      app.table.poemSelected.next(mockPoem);
+      expect(app.poemView.poem).toEqual(mockPoem)
+    });
   });
 });

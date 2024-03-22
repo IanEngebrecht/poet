@@ -1,5 +1,6 @@
 <app-search-menu (search)="search($event)"></app-search-menu>
-<app-poem-table *ngIf="!pending"></app-poem-table>
+<app-poem-table *ngIf="!pending" (poemSelected)="viewPoem($event)"></app-poem-table>
 <div *ngIf="pending" class="full-screen">
   <mat-spinner></mat-spinner>
 </div>
+<app-poem-view></app-poem-view>

@@ -1,7 +1,7 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 <!-- Title -->
-<mat-form-field appearance="outline">
+<mat-form-field appearance="outline" (keyup.enter)="applySearch()">
     <span matPrefix>
         <mat-icon class="search-icon">title</mat-icon>
     </span>
@@ -10,7 +10,7 @@
 </mat-form-field>
 
 <!-- Author -->
-<mat-form-field appearance="outline">
+<mat-form-field appearance="outline" (keyup.enter)="applySearch()">
     <span matPrefix>
         <mat-icon class="search-icon">person</mat-icon>
     </span>

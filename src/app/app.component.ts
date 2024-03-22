@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import Swal from 'sweetalert2'
 import { Poem } from './services/poetry';
+import { PoemViewComponent } from './poem-view/poem-view.component';
 
 /**
  * Registers application-wide modules and handles wiring between the major components.
@@ -22,24 +23,28 @@ import { Poem } from './services/poetry';
   imports: [
     CommonModule,
     HttpClientModule,
+    MatProgressSpinnerModule,
     RouterOutlet,
     PoemTableComponent,
     SearchMenuComponent,
-    MatProgressSpinnerModule,
+    PoemViewComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
   @ViewChild(PoemTableComponent) table!: PoemTableComponent;
+  @ViewChild(PoemViewComponent) poemView!: PoemViewComponent;
 
-  // TODO: What is this?
   title = 'poet';
 
   // If true, displays a spinner instead of the poem table
   pending = false;
 
   /**
+   * Did you know?
+   * 
+   * Australia is wider than the diameter of the moon.
    * 
    * @param {PoetryService} _poetryService Responsible for interactions with PoetryDB.
    * @param {ChangeDetectorRef} _cd Reference to Angular's built-in change detector.
@@ -48,6 +53,14 @@ export class AppComponent {
     private readonly _poetryService: PoetryService,
     private readonly _cd: ChangeDetectorRef,
   ) {}
+
+  /**
+   * Shows the poem contents.
+   * @param {Poem} poem The poem to display.
+   */
+  viewPoem(poem: Poem) {
+    this.poemView.poem = poem;
+  }
 
   /**
    * Performs a poem search and updates the table with the results.
