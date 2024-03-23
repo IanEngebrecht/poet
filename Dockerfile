@@ -1,37 +1,32 @@
+# --- STAGE 1: Build ---
 FROM node:20.11.1-alpine3.18 as build
+WORKDIR /app
 
-# Install Chromium (for unit tests)
-ENV CHROME_BIN=/usr/bin/chromium-browser
-# RUN echo @edge http://nl.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories && \
-#     echo @edge http://nl.alpinelinux.org/alpine/edge/main >> /etc/apk/repositories && \
-#     apk add --no-cache \
-#       chromium@edge \
-#       nss@edge
-RUN apk update && apk upgrade && \
-  apk add --no-cache \
-  chromium
+# Install node modules (production only)
+ENV NODE_ENV=production
+COPY --chown=node:node package*.json ./
+RUN npm ci && npm cache clean --force
+
+# Build the webapp
+COPY . .
+RUN npm run build
+
+# --- STAGE 2: Run ---
+FROM node:20.11.1-alpine3.18
+
+# Globally install package for serving the app
+RUN npm install -g angular-http-server
 
 # Prepare working directory
 WORKDIR /app
+RUN mkdir -p /app && chown node:node /app
+USER node
 
-# Install node modules (dev included)
-ENV NODE_ENV=development
-COPY package*.json ./
-RUN npm ci && npm cache clean --force
-# RUN npm ci --production && npm cache clean --force
+# Copy over compiled webapp code
+COPY --from=build --chown=node:node /app/dist/ ./dist/
+COPY --from=build --chown=node:node /app/node_modules/ ./node_modules/
 
-# RUN npm install -g @angular/cli
-
-COPY . .
-# RUN npm run build
-
-# FROM node:20.11.1-alpine3.18 as production
-
+# Run webapp
 EXPOSE 4200
-
-CMD [ "npm", "run", "start"]
-
-
-
-# COPY . .
-# RUN npm ci --production &
+WORKDIR /app/dist/poet/browser
+CMD [ "angular-http-server", "-p", "4200"]

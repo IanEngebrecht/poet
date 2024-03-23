@@ -1,25 +1,23 @@
-import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { PoemTableComponent } from './poem-table/poem-table.component';
-import { HttpClientModule } from '@angular/common/http';
-import { PoetryService } from './services/poetry.service';
-import { SearchMenuComponent } from './search-menu/search-menu.component';
-import { SearchCriteria } from './search-menu/search-menu';
-import { CommonModule } from '@angular/common';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import Swal from 'sweetalert2'
-import { Poem } from './services/poetry';
-import { PoemViewComponent } from './poem-view/poem-view.component';
+import { ChangeDetectorRef, Component, ViewChild } from "@angular/core";
+import { RouterOutlet } from "@angular/router";
+import { PoemTableComponent } from "./poem-table/poem-table.component";
+import { HttpClientModule } from "@angular/common/http";
+import { PoetryService } from "./services/poetry.service";
+import { SearchMenuComponent } from "./search-menu/search-menu.component";
+import { SearchCriteria } from "./search-menu/search-menu";
+import { CommonModule } from "@angular/common";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import Swal from "sweetalert2";
+import { Poem } from "./services/poetry";
+import { PoemViewComponent } from "./poem-view/poem-view.component";
 
 /**
  * Registers application-wide modules and handles wiring between the major components.
  */
 @Component({
-  selector: 'app-root',
+  selector: "app-root",
   standalone: true,
-  providers: [
-    PoetryService,
-  ],
+  providers: [PoetryService],
   imports: [
     CommonModule,
     HttpClientModule,
@@ -29,23 +27,23 @@ import { PoemViewComponent } from './poem-view/poem-view.component';
     SearchMenuComponent,
     PoemViewComponent,
   ],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  templateUrl: "./app.component.html",
+  styleUrl: "./app.component.scss",
 })
 export class AppComponent {
   @ViewChild(PoemTableComponent) table!: PoemTableComponent;
   @ViewChild(PoemViewComponent) poemView!: PoemViewComponent;
 
-  title = 'poet';
+  title = "poet";
 
   // If true, displays a spinner instead of the poem table
   pending = false;
 
   /**
    * Did you know?
-   * 
+   *
    * Australia is wider than the diameter of the moon.
-   * 
+   *
    * @param {PoetryService} _poetryService Responsible for interactions with PoetryDB.
    * @param {ChangeDetectorRef} _cd Reference to Angular's built-in change detector.
    */
@@ -71,10 +69,10 @@ export class AppComponent {
     const poems = await this._runSearch(criteria)
       .catch((error: string) => {
         Swal.fire({
-          title: 'Error!',
+          title: "Error!",
           text: error,
-          icon: 'error',
-        })
+          icon: "error",
+        });
       })
       .finally(() => {
         this.pending = false;
@@ -89,14 +87,17 @@ export class AppComponent {
 
   /**
    * Runs the poem search.
-   * Acts as a translator between the SearchCriteria interface used in the search menu 
+   * Acts as a translator between the SearchCriteria interface used in the search menu
    * and the author/title interface used by PoetryService.
    * @param {SearchCriteria} criteria The search criteria provided by the user.
    * @return {Promise<Poem[]>} List of poems matching the search criteria.
    */
   private _runSearch(criteria: SearchCriteria): Promise<Poem[]> {
     if (criteria.title && criteria.author) {
-      return this._poetryService.getAllFromAuthorAndTitle(criteria.author, criteria.title);
+      return this._poetryService.getAllFromAuthorAndTitle(
+        criteria.author,
+        criteria.title,
+      );
     }
     if (criteria.title) {
       return this._poetryService.getAllFromTitle(criteria.title);

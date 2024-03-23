@@ -1,11 +1,11 @@
 <div *ngIf="poem" class="background">
-    <div class="poem-contents">
-        <button class="close-button" mat-icon-button (click)="closePoem()">
-            <mat-icon>close</mat-icon>
-        </button>
-        <p class="title">{{ poem.title }}</p>
-        <p class="author">By {{ poem.author }}</p>
-        <mat-divider></mat-divider>
-        <p *ngFor="let line of poem.lines">{{ line }}</p>
-    </div>
+  <div class="poem-contents">
+    <button class="close-button" mat-icon-button (click)="closePoem()">
+      <mat-icon>close</mat-icon>
+    </button>
+    <p class="title">{{ poem.title }}</p>
+    <p class="author">By {{ poem.author }}</p>
+    <mat-divider></mat-divider>
+    <p *ngFor="let line of poem.lines">{{ line }}</p>
+  </div>
 </div>

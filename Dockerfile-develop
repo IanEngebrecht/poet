@@ -1,0 +1,19 @@
+FROM node:20.11.1-alpine3.18
+
+# Install Chromium (for unit tests)
+ENV CHROME_BIN=/usr/bin/chromium-browser
+RUN apk update && apk upgrade && \
+  apk add --no-cache \
+  chromium
+
+# Prepare working directory
+WORKDIR /app
+
+# Install node modules (dev included)
+ENV NODE_ENV=development
+COPY package*.json ./
+RUN npm ci && npm cache clean --force
+
+# Run webapp
+EXPOSE 4200
+CMD [ "npm", "run", "start"]

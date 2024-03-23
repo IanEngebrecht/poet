@@ -3,9 +3,5 @@ version: "2"
 services:
   webapp:
     build: .
-    environment:
-      - NODE_ENV=production
     ports:
       - "4200:4200"
-    network_mode: "host"
-    user: node

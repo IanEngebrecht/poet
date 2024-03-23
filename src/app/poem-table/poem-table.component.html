@@ -1,10 +1,5 @@
 <div [hidden]="dataSource.data.length === 0">
-  <table
-    mat-table
-    [dataSource]="dataSource"
-    class="user-data-table"
-    matSort
-  >
+  <table mat-table [dataSource]="dataSource" class="user-data-table" matSort>
     <!-- Title Column -->
     <ng-container matColumnDef="title">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
@@ -24,11 +19,17 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="selectPoem(row)"></tr>
-
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedColumns"
+      (click)="selectPoem(row)"
+    ></tr>
   </table>
 
-  <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+  <mat-paginator
+    [pageSize]="10"
+    [pageSizeOptions]="[5, 10, 25, 100]"
+  ></mat-paginator>
 </div>
 
 <!-- If there is no data, show this instead of the table -->

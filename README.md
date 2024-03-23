@@ -1,27 +1,54 @@
 # Poet
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.1.
+A web-based graphical user interface (GUI) wrapping the PoetryDB API (https://poetrydb.org/).
 
-## Development server
+Uses Angular version 17.3.1.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+# Prerequisites
 
-## Code scaffolding
+It is assumed that you have the following:
+* Docker Engine
+* Docker Compose
+* Internet access
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+# Building
 
-## Build
+To build the webapp:
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+```bash
+docker compose build webapp
+```
 
-## Running unit tests
+# Running
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+To run the webapp:
 
-## Running end-to-end tests
+```bash
+docker compose up
+```
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Both building and running can be run together by running:
 
-## Further help
+```bash
+docker compose up --build
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+# Development Mode
+
+In order to development utilities, the webapp service needs to be brought up differently:
+
+```bash
+docker compose -f docker-compose.develop.yml run --rm -it --build webapp sh
+```
+
+With the container running, set it up:
+
+```bash
+# Inside the container...
+
+npm install {some_new_package}   # install new package
+npm run start                    # manually start the webapp
+npm run test                     # run unit tests
+npm run prettier                 # run formatter
+npm run lint                     # run linter
+```

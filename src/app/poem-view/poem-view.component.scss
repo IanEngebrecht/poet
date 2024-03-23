@@ -1,44 +1,44 @@
 .background {
-    // Fill the screen
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+  // Fill the screen
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
 
-    // Configure the placement of the poem contents
-    display: grid;
-    align-items: center;
-    justify-items: center;
+  // Configure the placement of the poem contents
+  display: grid;
+  align-items: center;
+  justify-items: center;
 }
 
 .poem-contents {
-    background-color: white;
-    padding: 30px;
-    font-style: italic;
-    text-align: center;
-    position: relative;
+  background-color: white;
+  padding: 30px;
+  font-style: italic;
+  text-align: center;
+  position: relative;
 
-    // If poem is large, add scrollbar
-    max-height: 80%;
-    overflow-y: auto;
+  // If poem is large, add scrollbar
+  max-height: 80%;
+  overflow-y: auto;
 }
 
 .close-button {
-    position: absolute;
-    right: 5px;
-    top: 5px;
+  position: absolute;
+  right: 5px;
+  top: 5px;
 }
 
 .title {
-    font-size: large;
-    font-weight: bold;
-    font-style: normal;
-    text-align: left;
+  font-size: large;
+  font-weight: bold;
+  font-style: normal;
+  text-align: left;
 }
 
 .author {
-    text-align: left;
-    font-style: normal;
+  text-align: left;
+  font-style: normal;
 }
